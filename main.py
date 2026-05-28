@@ -2,9 +2,12 @@ import asyncio
 import discord
 from discord.ext import commands
 import os
+from dotenv import load_dotenv
 
-TOKEN = os.environ.get("DISCORD_TOKEN") or os.getenv("DISCORD_TOKEN")
-PREFIX = os.environ.get("PREFIX") or os.getenv("PREFIX", "!")
+load_dotenv()
+
+TOKEN = os.getenv("DISCORD_TOKEN")
+PREFIX = os.getenv("PREFIX", "!")
 
 intents = discord.Intents.default()
 intents.message_content = True
