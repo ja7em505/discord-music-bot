@@ -149,7 +149,14 @@ class Music(commands.Cog):
         return self.states[guild_id]
 
     async def search_youtube(self, query: str) -> list:
-        with youtube_dl.YoutubeDL(YDL_OPTIONS) as ydl:
+        search_opts = {
+            "quiet": True,
+            "extract_flat": "in_playlist",
+            "noplaylist": True,
+            "default_search": "ytsearch5",
+            "source_address": "0.0.0.0",
+        }
+        with youtube_dl.YoutubeDL(search_opts) as ydl:
             if re.match(r"^https?://", query):
                 data = ydl.extract_info(query, download=False)
                 if "entries" in data:
@@ -160,7 +167,15 @@ class Music(commands.Cog):
                 return data.get("entries", [])
 
     async def get_audio_url(self, url: str):
-        with youtube_dl.YoutubeDL({"format": "bestaudio/best", "quiet": True}) as ydl:
+        audio_opts = {
+            "format": "bestaudio/best",
+            "quiet": True,
+            "extractor_args": {"youtube": {"skip": ["webpage"], "player_client": ["android", "tv"]}},
+            "http_headers": {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+            },
+        }
+        with youtube_dl.YoutubeDL(audio_opts) as ydl:
             data = ydl.extract_info(url, download=False)
             return data["url"]
 
