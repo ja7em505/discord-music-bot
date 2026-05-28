@@ -1,0 +1,2 @@
+cd C:\Users\JA7EM\Desktop\discord-music-bot
+python main.py
